@@ -1,5 +1,6 @@
 import re
 import requests
+from config import TELEGRAM_TOKEN
 from rail_client import RailClient
 
 
@@ -8,7 +9,7 @@ class TelegramClient:
         self.last_update_id = 0
         self.last_updates = []
         self.base_url = "https://api.telegram.org/bot"
-        self.base_url += "ATOKEN"  # TODO: Load from config file
+        self.base_url += TELEGRAM_TOKEN
 
         self.endpoints = {
             "updates": self.base_url + "/getUpdates"

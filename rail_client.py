@@ -1,5 +1,6 @@
 import requests
 from models import DepartureBoard
+from config import RAIL_SERVICE_TOKEN, RAIL_DEPARTURES_TOKEN
 
 
 class RailClient:
@@ -12,11 +13,11 @@ class RailClient:
         self.endpoints = {
             "departures": {
                 "url": self.base_url + "/GetDepBoardWithDetails/{}",
-                "token": "ATOKEN"  # TODO: Load from config file
+                "token": RAIL_DEPARTURES_TOKEN
             },
             "services": {
                 "url": self.base_url + "/ServiceDetails/{}",
-                "token": "ATOKEN"  # TODO: Load from config file
+                "token": RAIL_SERVICE_TOKEN
             }
         }
 
