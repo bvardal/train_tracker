@@ -16,7 +16,8 @@ def generate_response(text):
         )
     else:
         origin, destination = m.group(1), m.group(2)
-        response = rail_client.get_services_for_trip(origin, destination)
+        rail_client.fetch_services_for_trip(origin, destination)
+        response = rail_client.get_services_text()
 
     return response
 

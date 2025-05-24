@@ -42,21 +42,26 @@ class RailClient:
         response.raise_for_status()
         return response.json()
 
-    def get_departures(self, origin, destination):
+    def fetch_services_for_trip(self, origin, destination):
         json = self.query_endpoint("departures", origin)
-
         dpb = DepartureBoard(json)
         self.services = dpb.get_services_by_dest(destination)
         self.services.sort()
 
+    def get_services_text(self):
         if self.services:
             return_list = []
             for i, x in enumerate(self.services):
-                return_list.append(str(i+1) + " " + str(x))
+                train_emoji = "\U0001F686"
+                return_list.append(
+                    f"{train_emoji} *{str(i+1)}.* {str(x)}\n"
+                )
+            print(return_list)
 
-            return_list.append(
-                "\nSelect a service to track with the syntax 'Track [n]'"
-            )
+            # Comment out until implementation
+            # return_list.append(
+            #     "\nSelect a service to track with the syntax 'Track [n]'"
+            # )
             reply = "\n".join(return_list)
         else:
             reply = "No suitable services found for this query!"

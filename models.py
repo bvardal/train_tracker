@@ -63,7 +63,7 @@ class Service(TimingDetails):
 
         if self.destination_matches:
             self.arrival_point = self.call_points[-1]
-            self.arrival_str = f"arriving at {self.arrival_point.time}"
+            self.arrival_str = f"Arrives at {self.arrival_point.time}"
         else:
             self.arrival_point = next(
                 (x for x in self.call_points if x.crs == destination),
@@ -71,7 +71,7 @@ class Service(TimingDetails):
             )
             if self.arrival_point:
                 self.arrival_str = (
-                    f"passing {destination} "
+                    f"Passes {destination} "
                     f"at {self.arrival_point.time}"
                 )
         return self.arrival_point
@@ -81,8 +81,9 @@ class Service(TimingDetails):
             return f"Train departed from {self.platform} at {self.atd}"
         else:
             return (
-                f"Train to {self.dest_str} departing platform {self.platform}"
-                f" at {self.time} and {self.arrival_str}"
+                f"To {self.dest_str}\n"
+                f"Departs platform {self.platform} at {self.time}\n"
+                f"{self.arrival_str}"
             )
 
 
