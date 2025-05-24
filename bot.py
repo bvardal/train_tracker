@@ -3,7 +3,7 @@ from telegram_client import TelegramClient
 from rail_client import RailClient
 
 telegram_client = TelegramClient()
-rail_client = RailClient
+rail_client = RailClient()
 
 
 def generate_response(text):
@@ -16,9 +16,7 @@ def generate_response(text):
         )
     else:
         origin, destination = m.group(1), m.group(2)
-        client = RailClient()
-
-        response = client.get_departures(origin, destination)
+        response = rail_client.get_services_for_trip(origin, destination)
 
     return response
 
