@@ -6,12 +6,11 @@ telegram_client = TelegramClient()
 rail_client = RailClient
 
 
-def generate_response(message):
-    text = message["text"].upper()
-    m = re.search(r"([A-Z]{3}) TO ([A-Z]{3})", text)
+def generate_response(text):
+    m = re.search(r"([A-Z]{3}) TO ([A-Z]{3})", text.upper())
 
     if not m:
-        message["text"] = (
+        response = (
             "Unrecognised format for departures query. "
             "Expected format: [CRS] to [CRS]"
         )
@@ -19,9 +18,9 @@ def generate_response(message):
         origin, destination = m.group(1), m.group(2)
         client = RailClient()
 
-        message["text"] = client.get_departures(origin, destination)
+        response = client.get_departures(origin, destination)
 
-    return message
+    return response
 
 
 def response_loop():
@@ -32,8 +31,8 @@ def response_loop():
             if not message:
                 continue
             else:
-                response = generate_response(message)
-                telegram_client.send_message(response)
+                response = generate_response(message["text"])
+                telegram_client.send_message(message["chat_id"], response)
 
     except KeyboardInterrupt:
         print("Program terminated by user.")

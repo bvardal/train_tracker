@@ -38,7 +38,13 @@ class TelegramClient:
         else:
             return None
 
-    def send_message(self, payload):
+    def send_message(self, chat_id, text):
+        payload = {
+            "chat_id": chat_id,
+            "text": text,
+            "parse_mode": "Markdown"
+        }
+
         response = requests.post(self.base_url + "/sendMessage", data=payload)
         response.raise_for_status()
         return response
