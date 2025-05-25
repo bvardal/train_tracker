@@ -56,7 +56,6 @@ class RailClient:
                 return_list.append(
                     f"{train_emoji} *{str(i+1)}.* {str(x)}\n"
                 )
-            print(return_list)
 
             # Comment out until implementation
             # return_list.append(
