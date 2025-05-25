@@ -10,4 +10,6 @@ Fulfil my personal requirements for a service that can:
 * Docker or local install of Python 3.13
 * Python requests library
 * Telegram bot token
-* RailData access tokens for "Live Departure Board" and "Service" endpoints (requires an account)
+* RailData access tokens (account required) for following endpoints:
+  * Live Departure Board
+  * Service Details
