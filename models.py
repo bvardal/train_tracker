@@ -102,5 +102,10 @@ class CallingPoint(Station, TimingDetails):
         Station.__init__(self, json)
         try:
             TimingDetails.__init__(self, json, False)
-        except KeyError:
-            print(json)
+        except KeyError as k:
+            # More legible alternative to key error
+            raise KeyError(
+                f"Attempted to access key {k} in JSON\n"
+                f"Valid keys were: {list(json.keys())}"
+            )
+
