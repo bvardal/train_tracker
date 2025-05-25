@@ -21,7 +21,7 @@ class TelegramClient:
         response.raise_for_status()
         self.last_updates = response.json().get("result", [])
 
-    def get_last_human_message(self):
+    def get_last_message(self):
         if not self.last_updates:
             return None
         else:
@@ -32,6 +32,7 @@ class TelegramClient:
 
         if not message["from"]["is_bot"]:
             return {
+                "user_id": message["from"]["id"],
                 "chat_id": message["chat"]["id"],
                 "text": message["text"]
             }

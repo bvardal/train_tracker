@@ -26,8 +26,8 @@ def response_loop():
     try:
         while True:
             telegram_client.fetch_updates()
-            message = telegram_client.get_last_human_message()
-            if not message:
+            message = telegram_client.get_last_message()
+            if not message:  # May be no new message
                 continue
             else:
                 response = generate_response(message["text"])
