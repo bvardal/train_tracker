@@ -17,19 +17,20 @@ class TimingDetails:
         self.std = json["st" + is_service*"d"]
         self.etd = json["et" + is_service*"d"]
 
-        if self.etd == "On time":
-            self.time = self.std  # If on time, use scheduled
-        else:
-            t1 = datetime.strptime(self.std, "%H:%M")
+        # Default to using std for time, if not a time then fail
+        self.time = datetime.strptime(self.std, "%H:%M")
+        self.time_str = self.std
+
+        if self.etd != "On time":
             try:
-                # If both std and etd are times, prefer etd with delay in min
-                t2 = datetime.strptime(self.etd, "%H:%M")
-                minute_diff = int((t2 - t1).total_seconds() // 60)
-                self.time = f"{self.etd} ({minute_diff}min delay)"
+                # If etd is also a time, display etd (more accurate) with delay
+                etime = datetime.strptime(self.etd, "%H:%M")
+                minute_diff = int((etime - self.time).total_seconds() // 60)
+                self.time = etime
+                self.time_str = f"*{self.etd}* ({minute_diff}min delay)"
             except ValueError:
-                # If etd is not a time, display std and etd string
-                # TODO: split this into datetime and display str vars?
-                self.time = f"{self.std} ({self.etd})"
+                # If etd is not a time, display std with etd warning
+                self.time_str = f"*{self.std}* ({self.etd})"
 
         # Values that may not exist
         self.platform = json.get("platform") or "TBA"
@@ -52,10 +53,10 @@ class Service(TimingDetails):
         self.call_points = [CallingPoint(x) for x in json_points]
 
     def __lt__(self, service):
-        return self.arrival_point.time[0:5] < service.arrival_point.time[0:5]
+        return self.arrival_point.time < service.arrival_point.time
 
     def __gt__(self, service):
-        return self.arrival_point.time[0:5] > service.arrival_point.time[0:5]
+        return self.arrival_point.time > service.arrival_point.time
 
     def find_dest(self, destination):
         # Initial check to see if last stop is requested destination
@@ -63,7 +64,7 @@ class Service(TimingDetails):
 
         if self.destination_matches:
             self.arrival_point = self.call_points[-1]
-            self.arrival_str = f"Arrives at {self.arrival_point.time}"
+            self.arrival_str = f"Arrives at {self.arrival_point.time_str}"
         else:
             self.arrival_point = next(
                 (x for x in self.call_points if x.crs == destination),
@@ -72,7 +73,7 @@ class Service(TimingDetails):
             if self.arrival_point:
                 self.arrival_str = (
                     f"Passes {destination} "
-                    f"at {self.arrival_point.time}"
+                    f"at {self.arrival_point.time_str}"
                 )
         return self.arrival_point
 
@@ -82,7 +83,7 @@ class Service(TimingDetails):
         else:
             return (
                 f"To {self.dest_str}\n"
-                f"Departs platform {self.platform} at {self.time}\n"
+                f"Departs platform {self.platform} at {self.time_str}\n"
                 f"{self.arrival_str}"
             )
 
