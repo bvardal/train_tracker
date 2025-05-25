@@ -9,10 +9,6 @@ class TelegramClient:
         self.base_url = "https://api.telegram.org/bot"
         self.base_url += TELEGRAM_TOKEN
 
-        self.endpoints = {
-            "updates": self.base_url + "/getUpdates"
-        }
-
     def fetch_updates(self):
         response = requests.get(
             self.base_url + "/getUpdates",
