@@ -19,7 +19,7 @@ class TimingDetails:
 
         # Default to using std for time, if not a time then fail
         self.time = datetime.strptime(self.std, "%H:%M")
-        self.time_str = self.std
+        self.time_str = f"*{self.std}*"
 
         if self.etd != "On time":
             try:
